@@ -100,5 +100,17 @@ router.delete('/:id', protectRoute, async (req, res) => {
     }
 })
 
-router.get('/:id')
+router.get('/:id', protectRoute, async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id).populate("user", "username profileImage");
+        if (!book) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+        res.json(book);
+    } catch (error) {
+        console.error("Error fetching book by ID:", error.message);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
 export default router;

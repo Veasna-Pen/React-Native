@@ -1,20 +1,33 @@
-import { View, Text, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import styles from '@/assets/styles/signup.styles'
 import COLORS from '@/constants/colors'
 import { useState } from 'react'
 import { Link } from 'expo-router'
+import { RegisterProps, useAuthStore } from '@/store/authStore'
 
 export default function Signup() {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const { user, isLoading, register } = useAuthStore();
 
-  const handleSignup = () => {
-    console.log('signup..');
+  const handleSignup = async () => {
+    ;
+    const formData: RegisterProps = {
+      username,
+      email,
+      password
+    }
 
+    const result = await register(formData);
+
+    if (!result.success) {
+      Alert.alert('Error', result.error);
+    } else {
+      Alert.alert('Success', 'Account created successfully!');
+    }
   }
 
   return (
@@ -35,7 +48,7 @@ export default function Signup() {
                 <Ionicons name='person-outline' size={20} color={COLORS.primary} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
-                  placeholder='Veasna'
+                  placeholder='jonhdoe'
                   placeholderTextColor={COLORS.placeholderText}
                   value={username}
                   onChangeText={setUsername}
@@ -102,7 +115,7 @@ export default function Signup() {
               style={styles.footer}
             >
               <Text style={styles.footerText}>Already have an account?</Text>
-              <Link href='/signup' asChild>
+              <Link href='/(auth)' asChild>
                 <TouchableOpacity>
                   <Text style={styles.link}>Login</Text>
                 </TouchableOpacity>
