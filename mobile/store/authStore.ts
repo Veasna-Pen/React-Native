@@ -22,8 +22,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     register: async ({ username, password, email }: { username: string, password: string, email: string }) => {
         try {
             set({ isLoading: true })
-            // const res = await fetch(`${process.env.BASE_URL}/auth/register`, {
-            const res = await fetch(`https://r63dt738-3000.asse.devtunnels.ms/api/auth/register`, {
+            const res = await fetch(`https://react-native-qdcu.onrender.com/api/auth/register`, {
 
                 method: 'POST',
                 headers: {
